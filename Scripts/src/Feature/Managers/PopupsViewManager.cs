@@ -13,6 +13,8 @@ namespace PopupsModule.src.Feature.Managers
 {
     public class PopupsViewManager : MonoBehaviour, IPopupsViewManager<PopupEntityBase>
     {
+#pragma warning disable 0649
+        
         [Inject]
         private DiContainer container;
 
@@ -29,6 +31,8 @@ namespace PopupsModule.src.Feature.Managers
         {
             popupsCanvas = container.InstantiatePrefab(popupsCanvasPrefab);
         }
+        
+#pragma warning restore
 
         public PopupViewBase CurrentOpenedPopup => popupsManager.GetCurrentOpenedPopup();
 

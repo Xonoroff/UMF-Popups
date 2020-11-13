@@ -1,16 +1,19 @@
 ﻿using Core.src.Messaging;
-using Core.src.Utils;
 using PopupsModule.src.Infrastructure.Entities;
 using PopupsModule.src.Infrastructure.Interfaces;
 using PopupsModule.src.Infrastructure.Messaging.RequestResponse.OpenPopup;
 using Zenject;
 
-namespace PopupsModule.src.Feature.Installers
+namespace Scripts.src.Feature.Installers
 {
     public class PopupsModuleSignalsInstaller : Installer<PopupsModuleSignalsInstaller>
     {
+#pragma warning disable 0649
+        
         [Inject]
         private IEventBus eventBus;
+        
+#pragma warning restore
         
         public override void InstallBindings()
         {

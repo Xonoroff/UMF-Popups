@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace Scripts.src.Editor
 {
-    public class ModuleConfigCreator : MonoBehaviour
+    public class PopupsModuleConfigCreator : MonoBehaviour
     {
         [MenuItem("Modular framework/Create/Popups module config")]
         public static void CreateMyAsset()
         {
-            PopupsSystemModuleConfig asset = ScriptableObject.CreateInstance<PopupsSystemModuleConfig>();
+            PopupsModuleConfig asset = ScriptableObject.CreateInstance<PopupsModuleConfig>();
 
-            AssetDatabase.CreateAsset(asset, "Assets/Resources/PopupsSystemModuleConfig.asset");
+            AssetDatabase.CreateAsset(asset, $"Assets/Resources/{ PopupsModuleConfig.FILE_NAME }.asset");
             AssetDatabase.SaveAssets();
 
             EditorUtility.FocusProjectWindow();
