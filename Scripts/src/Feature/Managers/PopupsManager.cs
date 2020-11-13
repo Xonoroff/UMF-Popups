@@ -47,7 +47,7 @@ namespace PopupsModule.src.Feature.Managers
 
         public QueuedPopup DequeuePopup()
         {
-            return popupsModuleStorage.Dequeue();
+            return popupsModuleStorage.DequeuePopup();
         }
     }
 }

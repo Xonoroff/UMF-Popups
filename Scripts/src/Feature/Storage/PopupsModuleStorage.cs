@@ -7,7 +7,7 @@ namespace Scripts.src.Feature.Storage
     public class PopupsModuleStorage : IPopupsModuleStorage
     {
         private readonly List<PopupViewBase> visiblePopups = new List<PopupViewBase>();
-        private readonly Queue<QueuedPopup> queuedPopups = new Queue<QueuedPopup>();
+        private readonly List<QueuedPopup> queuedPopups = new List<QueuedPopup>();
         
         public PopupViewBase GetCurrentOpenedPopup()
         {
@@ -21,7 +21,7 @@ namespace Scripts.src.Feature.Storage
 
         public void AddPopupToQueue(QueuedPopup queuedPopup)
         {
-            queuedPopups.Enqueue(queuedPopup);
+            queuedPopups.Add(queuedPopup);
         }
 
         public void RemoveVisiblePopup(PopupViewBase popupView)
@@ -40,9 +40,11 @@ namespace Scripts.src.Feature.Storage
             return visiblePopups.FirstOrDefault(x => x.Data == popupData);
         }
 
-        public QueuedPopup Dequeue()
+        public QueuedPopup DequeuePopup()
         {
-            return queuedPopups.Dequeue();
+            var popupInQueue = queuedPopups.OrderBy(x=>x.PopupData.Order).FirstOrDefault();
+            queuedPopups.Remove(popupInQueue);
+            return popupInQueue;
         }
     }
 }

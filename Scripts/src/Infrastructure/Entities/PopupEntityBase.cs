@@ -6,6 +6,8 @@ namespace PopupsModule.src.Infrastructure.Entities
     {
         public string PopupId { get; set; }
         
+        public int Order { get; set; }
+        
         public object PopupData { get; set; }
     }
 }

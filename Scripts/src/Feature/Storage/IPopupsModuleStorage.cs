@@ -10,6 +10,6 @@ namespace Scripts.src.Feature.Storage
         void RemoveVisiblePopup(PopupViewBase popupView);
         void AddVisiblePopup(PopupViewBase instantiatedPopupView);
         PopupViewBase GetVisiblePopup(PopupEntityBase popupData);
-        QueuedPopup Dequeue();
+        QueuedPopup DequeuePopup();
     }
 }

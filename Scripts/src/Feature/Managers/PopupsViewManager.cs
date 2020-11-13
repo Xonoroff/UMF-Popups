@@ -78,7 +78,7 @@ namespace PopupsModule.src.Feature.Managers
         {
             popupsManager.Remove(popup);
             Destroy(popup.gameObject);
-            QueuedPopup queuedPopup = popupsManager.DequeuePopup();
+            var queuedPopup = popupsManager.DequeuePopup();
             if (queuedPopup != null)
             {
                 Open(queuedPopup.PopupData, queuedPopup.OnOpened, queuedPopup.OnFail);

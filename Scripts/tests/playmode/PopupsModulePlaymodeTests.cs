@@ -27,7 +27,7 @@ public class PopupsModulePlaymodeTests : SceneTestFixture
     }
 
     [UnityTest]
-    public IEnumerator TestScene()
+    public IEnumerator ShowPopupsInQueue()
     {
         yield return LoadScene("PopupsModule.Tests.Playmode.MainScene");
 
@@ -49,13 +49,11 @@ public class PopupsModulePlaymodeTests : SceneTestFixture
         }
         
         yield return new WaitForSeconds(1f);
-        cachedPopup.Hide();
-
-        yield return new WaitForSeconds(1f);
-        cachedPopup.Hide();
-        
-        yield return new WaitForSeconds(1f);
-        cachedPopup.Hide();
+        while (cachedPopup != null)
+        {
+            cachedPopup.Hide();
+            yield return new WaitForSeconds(1f);
+        }
         
         yield return new WaitForSeconds(5);
         // TODO: Add assertions here now that the scene has started
