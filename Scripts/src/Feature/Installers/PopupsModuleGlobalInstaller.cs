@@ -12,9 +12,6 @@ namespace PopupsModule.src.Feature.Installers
     public class PopupsModuleGlobalInstaller : GlobalInstallerBase<PopupsModuleGlobalInstaller, PopupsModuleInstaller>
     {
         protected override string SubContainerName => "PopupsModuleContainer";
-
-        [SerializeField]
-        private GameObject popupsCanvas;
         
         [Inject]
         private SignalBus signalBus;
@@ -24,8 +21,6 @@ namespace PopupsModule.src.Feature.Installers
             signalBus.DeclareSignal<LoadPopupAssetRequest>();
             signalBus.DeclareSignal<OpenPopupRequest>();
             
-            Container.Bind<GameObject>().WithId("PopupsCanvas").FromInstance(popupsCanvas).AsCached();
-
             base.InstallBindings();
             
             Container.Bind<IPopupsViewManager<PopupEntityBase>>()
