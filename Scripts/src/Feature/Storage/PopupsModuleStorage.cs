@@ -16,7 +16,7 @@ namespace Scripts.src.Feature.Storage
 
         public bool IsAnyVisiblePopups()
         {
-            return GetCurrentOpenedPopup() == null && visiblePopups.Count == 0;
+            return visiblePopups.Count != 0;
         }
 
         public void AddPopupToQueue(QueuedPopup queuedPopup)
