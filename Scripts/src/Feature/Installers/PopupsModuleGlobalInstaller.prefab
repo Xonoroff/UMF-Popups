@@ -43,3 +43,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40cfedd2b74c4bcea4c3268a3e2da29a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  popupsCanvas: {fileID: 956830659508888348, guid: 1dd53dfafc0b64c409ab669ce636d712,
+    type: 3}

@@ -19,21 +19,20 @@ namespace PopupsModule.src.Feature.Managers
         [Inject]
         private IEventBus eventBus;
         
+        [Inject]
+        private IPopupsManager popupsManager;
+        
         private GameObject popupsCanvas;
-
-        private List<PopupViewBase> visiblePopups = new List<PopupViewBase>();
-
-        private PopupViewBase currentOpenedPopup;
-
+        
         [Inject]
         private void Initialize([Inject(Id = "PopupsCanvas")] GameObject popupsCanvasPrefab)
         {
             popupsCanvas = container.InstantiatePrefab(popupsCanvasPrefab);
         }
 
-        public PopupViewBase CurrentOpenedPopup => currentOpenedPopup;
+        public PopupViewBase CurrentOpenedPopup => popupsManager.GetCurrentOpenedPopup();
 
-        public bool IsAnyOpenedPopups => currentOpenedPopup != null;
+        public bool IsAnyOpenedPopups => CurrentOpenedPopup != null;
 
         public async void Open(PopupEntityBase popupData, Action<PopupViewBase> onOpened = null, Action onFail = null)
         {
@@ -41,22 +40,30 @@ namespace PopupsModule.src.Feature.Managers
             {
                 AssetId = popupData.PopupId,
             };
-            
-            var response = await eventBus.FireAsync<LoadPopupAssetRequest, LoadPopupAssetResponse>(request);
-            var isError = response.Exception != null;
-            if (isError)
+
+            var canBePopupOpened = popupsManager.CanPopupBeOpened(popupData);
+            if (canBePopupOpened)
             {
-                OnPopupLoadedFailHandler(response.Exception);
+                var response = await eventBus.FireAsync<LoadPopupAssetRequest, LoadPopupAssetResponse>(request);
+                var isError = response.Exception != null;
+                if (isError)
+                {
+                    OnPopupLoadedFailHandler(response.Exception);
+                }
+                else
+                {
+                    OnPopupLoadedSuccessHandler(response.Result, popupData, onOpened);
+                } 
             }
             else
             {
-                OnPopupLoadedSuccessHandler(response.Result, popupData, onOpened);
+                popupsManager.EnqueuePopup(popupData, onOpened, onFail);
             }
         }
 
         public void Close(PopupEntityBase popupData, Action onClosed, Action onFail)
         {
-            var expectedPopup = visiblePopups.FirstOrDefault(x => x.Data == popupData);
+            var expectedPopup = popupsManager.GetVisiblePopup(popupData);
             if (expectedPopup == null)
             {
                 Debug.LogError($"Popup with id {popupData.PopupId} can't be found in visiblePopups");
@@ -68,10 +75,14 @@ namespace PopupsModule.src.Feature.Managers
         }
 
         private void Close(PopupViewBase popup)
-        {  
-            visiblePopups.Remove(popup);
-            currentOpenedPopup = null;
+        {
+            popupsManager.Remove(popup);
             Destroy(popup.gameObject);
+            QueuedPopup queuedPopup = popupsManager.DequeuePopup();
+            if (queuedPopup != null)
+            {
+                Open(queuedPopup.PopupData, queuedPopup.OnOpened, queuedPopup.OnFail);
+            }
         }
 
         private void OnPopupLoadedSuccessHandler(PopupViewBase popupView, PopupEntityBase popupData, Action<PopupViewBase> onSuccess)
@@ -82,15 +93,15 @@ namespace PopupsModule.src.Feature.Managers
             instantiatedPopupView.Data = popupData;
             instantiatedPopupView.SetData(popupData);
             instantiatedPopupView.Show();
-            visiblePopups.Add(instantiatedPopupView);
             instantiatePrefab.transform.SetParent(popupsCanvas.transform, false);
             onSuccess?.Invoke(instantiatedPopupView);
-            currentOpenedPopup = instantiatedPopupView;
+
+            popupsManager.AddPopupAsVisible(instantiatedPopupView);
         }  
         
         private void OnPopupLoadedFailHandler(Exception exception)
         {
-            
+            Debug.LogError(exception.Message);
         }
     }
 }

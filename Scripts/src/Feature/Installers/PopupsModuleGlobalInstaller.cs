@@ -4,6 +4,7 @@ using PopupsModule.src.Infrastructure.Entities;
 using PopupsModule.src.Infrastructure.Interfaces;
 using PopupsModule.src.Infrastructure.Messaging.RequestResponse.LoadPopup;
 using PopupsModule.src.Infrastructure.Messaging.RequestResponse.OpenPopup;
+using UnityEngine;
 using Zenject;
 
 namespace PopupsModule.src.Feature.Installers
@@ -12,6 +13,9 @@ namespace PopupsModule.src.Feature.Installers
     {
         protected override string SubContainerName => "PopupsModuleContainer";
 
+        [SerializeField]
+        private GameObject popupsCanvas;
+        
         [Inject]
         private SignalBus signalBus;
         
@@ -20,6 +24,8 @@ namespace PopupsModule.src.Feature.Installers
             signalBus.DeclareSignal<LoadPopupAssetRequest>();
             signalBus.DeclareSignal<OpenPopupRequest>();
             
+            Container.Bind<GameObject>().WithId("PopupsCanvas").FromInstance(popupsCanvas).AsCached();
+
             base.InstallBindings();
             
             Container.Bind<IPopupsViewManager<PopupEntityBase>>()
