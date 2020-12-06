@@ -1,0 +1,17 @@
+{
+    "name": "MF.PopupsModule.Editor",
+    "references": [
+        "GUID:7cc51ecdc06383d47bd56849d47fbb1d"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
