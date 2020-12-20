@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using Core.src.Messaging;
 using PopupsModule.src.Infrastructure.Entities;
 using PopupsModule.src.Infrastructure.Interfaces;
 using PopupsModule.src.Infrastructure.Messaging.RequestResponse.LoadPopup;
+using Scripts.src.Feature.Entities;
 using UnityEngine;
 using Zenject;
 
@@ -42,7 +44,8 @@ namespace Scripts.src.Feature.Managers
                 AssetId = popupData.PopupId,
             };
 
-            var canBePopupOpened = popupsManager.CanPopupBeOpened(popupData.RulesToOpen);
+            var rulesToOpen = container.TryResolveId<List<PopupRuleBase>>(popupData.PopupOpenRule);
+            var canBePopupOpened = popupsManager.CanPopupBeOpened(rulesToOpen);
             if (canBePopupOpened)
             {
                 var response = await eventBus.FireAsync<LoadPopupAssetRequest, LoadPopupAssetResponse>(request);

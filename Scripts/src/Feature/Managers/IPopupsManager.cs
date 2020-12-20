@@ -9,7 +9,7 @@ namespace Scripts.src.Feature.Managers
     {
         void Remove(PopupViewBase popup);
         PopupViewBase GetCurrentOpenedPopup();
-        bool CanPopupBeOpened(List<PopupOpenRuleBase> rules);
+        bool CanPopupBeOpened(List<PopupRuleBase> rules);
         void EnqueuePopup(PopupEntityBase popupData, Action<PopupViewBase> onOpened = null, Action onFail = null);
         void AddPopupAsVisible(PopupViewBase instantiatedPopupView);
         PopupViewBase GetVisiblePopup(PopupEntityBase popupData);

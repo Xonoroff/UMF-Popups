@@ -7,6 +7,7 @@ using PopupsModule.src.Infrastructure.Interfaces;
 using PopupsModule.src.Infrastructure.Messaging.RequestResponse.LoadPopup;
 using Scripts.src.Feature.Entities;
 using Scripts.src.Feature.Rules;
+using Scripts.src.Infrastructure.Rules;
 using Scripts.tests.playmode;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -38,7 +39,6 @@ public class PopupsModulePlaymodeTests : SceneTestFixture
         signalBus.Subscribe<LoadPopupAssetRequest>(OnAssetShouldBeLoadedCallback);
         var containerWithPopups = GameObject.FindObjectOfType<TestPopupsContainer>();
         cachedPopups = containerWithPopups.GetPopups();
-        var rule = SceneContainer.Resolve<AnyVisiblePopupsRule>();
         
         for (int i = 0; i < cachedPopups.Count; i++)
         {
@@ -46,7 +46,6 @@ public class PopupsModulePlaymodeTests : SceneTestFixture
             {
                 PopupData = null,
                 PopupId = cachedPopups[i].gameObject.name,
-                RulesToOpen = new List<PopupOpenRuleBase>() { rule }
             };
             
             popupsViewManager.Open(popupData, OnSuccess, OnFail);
@@ -77,10 +76,11 @@ public class PopupsModulePlaymodeTests : SceneTestFixture
         signalBus.Subscribe<LoadPopupAssetRequest>(OnAssetShouldBeLoadedCallback);
         var containerWithPopups = GameObject.FindObjectOfType<TestPopupsContainer>();
         cachedPopups = containerWithPopups.GetPopups();
+        
 
         for (int i = 0; i < cachedPopups.Count; i++)
         {
-            var popupData = new PopupEntityBase()
+            var popupData = new PopupEntityBase(PopupRuleKeys.ForceShowRule)
             {
                 PopupData = null,
                 PopupId = cachedPopups[i].gameObject.name,

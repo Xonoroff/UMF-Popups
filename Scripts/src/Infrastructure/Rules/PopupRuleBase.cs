@@ -1,6 +1,6 @@
 namespace Scripts.src.Feature.Entities
 {
-    public abstract class PopupOpenRuleBase
+    public abstract class PopupRuleBase
     {
         public abstract bool CanBeOpened();
     }

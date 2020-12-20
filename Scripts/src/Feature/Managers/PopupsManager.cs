@@ -26,7 +26,7 @@ namespace Scripts.src.Feature.Managers
             return popupsModuleStorage.GetCurrentOpenedPopup();
         }
 
-        public bool CanPopupBeOpened(List<PopupOpenRuleBase> rules)
+        public bool CanPopupBeOpened(List<PopupRuleBase> rules)
         {
             if (rules == null)
             {

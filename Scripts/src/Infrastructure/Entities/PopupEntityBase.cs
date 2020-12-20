@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Core.src.Entity;
 using Scripts.src.Feature.Entities;
-using Zenject;
+using Scripts.src.Infrastructure.Rules;
 
 namespace PopupsModule.src.Infrastructure.Entities
 {
@@ -13,11 +13,11 @@ namespace PopupsModule.src.Infrastructure.Entities
         
         public object PopupData { get; set; }
 
-        public List<PopupOpenRuleBase> RulesToOpen { get; set; }
-
-        public PopupEntityBase(List<PopupOpenRuleBase> rulesToOpen = null)
+        public string PopupOpenRule { get; }
+        
+        public PopupEntityBase(string ruleId = PopupRuleKeys.ShowIfNoVisiblePopupsRule)
         {
-            RulesToOpen = rulesToOpen;
+            PopupOpenRule = ruleId;
         }
     }
 }

@@ -4,11 +4,11 @@ using Scripts.src.Feature.Entities;
 
 namespace Scripts.src.Feature.Rules
 {
-    public class AnyVisiblePopupsRule : PopupOpenRuleBase
+    public class ShowWhenNoVisiblePopupRule : PopupRuleBase
     {
         private readonly IPopupsViewManager<PopupEntityBase> viewManager;
 
-        public AnyVisiblePopupsRule(IPopupsViewManager<PopupEntityBase> viewManager)
+        public ShowWhenNoVisiblePopupRule(IPopupsViewManager<PopupEntityBase> viewManager)
         {
             this.viewManager = viewManager;
         }
