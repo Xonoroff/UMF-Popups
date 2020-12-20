@@ -1,9 +1,10 @@
 using Core.src.Utils;
-using PopupsModule.src.Feature.Managers;
 using PopupsModule.src.Infrastructure.Entities;
 using PopupsModule.src.Infrastructure.Interfaces;
 using PopupsModule.src.Infrastructure.Messaging.RequestResponse.LoadPopup;
 using PopupsModule.src.Infrastructure.Messaging.RequestResponse.OpenPopup;
+using Scripts.src.Feature.Managers;
+using Scripts.src.Feature.Rules;
 using Zenject;
 
 namespace Scripts.src.Feature.Installers
@@ -31,7 +32,10 @@ namespace Scripts.src.Feature.Installers
                 .FromSubContainerResolve()
                 .ByInstanceGetter(SubContainerInstanceGetter)
                 .AsCached();
-            
+
+                        
+            Container.Bind<AnyVisiblePopupsRule>().AsTransient();
+
             PopupsModuleSignalsInstaller.Install(Container);
         }
     }

@@ -1,9 +1,11 @@
-
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using PopupsModule.src.Infrastructure.Entities;
+using Scripts.src.Feature.Entities;
 using Scripts.src.Feature.Storage;
 
-namespace PopupsModule.src.Feature.Managers
+namespace Scripts.src.Feature.Managers
 {
     public class PopupsManager : IPopupsManager
     {
@@ -24,9 +26,19 @@ namespace PopupsModule.src.Feature.Managers
             return popupsModuleStorage.GetCurrentOpenedPopup();
         }
 
-        public bool CanPopupBeOpened(PopupEntityBase popupData)
+        public bool CanPopupBeOpened(List<PopupOpenRuleBase> rules)
         {
-            return !popupsModuleStorage.IsAnyVisiblePopups();
+            if (rules == null)
+            {
+                return true;
+            }
+
+            if (rules.Count == 0)
+            {
+                return true;
+            }
+
+            return rules.All(x => x.CanBeOpened());
         }
 
         public void EnqueuePopup(PopupEntityBase popupData, Action<PopupViewBase> onOpened = null, Action onFail = null)

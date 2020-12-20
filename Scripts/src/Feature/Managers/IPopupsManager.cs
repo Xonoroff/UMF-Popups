@@ -1,13 +1,15 @@
 using System;
+using System.Collections.Generic;
 using PopupsModule.src.Infrastructure.Entities;
+using Scripts.src.Feature.Entities;
 
-namespace PopupsModule.src.Feature.Managers
+namespace Scripts.src.Feature.Managers
 {
     public interface IPopupsManager
     {
         void Remove(PopupViewBase popup);
         PopupViewBase GetCurrentOpenedPopup();
-        bool CanPopupBeOpened(PopupEntityBase popupData);
+        bool CanPopupBeOpened(List<PopupOpenRuleBase> rules);
         void EnqueuePopup(PopupEntityBase popupData, Action<PopupViewBase> onOpened = null, Action onFail = null);
         void AddPopupAsVisible(PopupViewBase instantiatedPopupView);
         PopupViewBase GetVisiblePopup(PopupEntityBase popupData);

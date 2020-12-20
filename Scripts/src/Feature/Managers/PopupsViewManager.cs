@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Core.src.Messaging;
-using Core.src.Utils;
 using PopupsModule.src.Infrastructure.Entities;
 using PopupsModule.src.Infrastructure.Interfaces;
 using PopupsModule.src.Infrastructure.Messaging.RequestResponse.LoadPopup;
 using UnityEngine;
 using Zenject;
 
-namespace PopupsModule.src.Feature.Managers
+namespace Scripts.src.Feature.Managers
 {
     public class PopupsViewManager : MonoBehaviour, IPopupsViewManager<PopupEntityBase>
     {
@@ -45,7 +42,7 @@ namespace PopupsModule.src.Feature.Managers
                 AssetId = popupData.PopupId,
             };
 
-            var canBePopupOpened = popupsManager.CanPopupBeOpened(popupData);
+            var canBePopupOpened = popupsManager.CanPopupBeOpened(popupData.RulesToOpen);
             if (canBePopupOpened)
             {
                 var response = await eventBus.FireAsync<LoadPopupAssetRequest, LoadPopupAssetResponse>(request);

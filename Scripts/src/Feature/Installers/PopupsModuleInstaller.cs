@@ -1,5 +1,5 @@
-﻿using PopupsModule.src.Feature.Managers;
-using Scripts.src.Feature.Entities;
+﻿using Scripts.src.Feature.Entities;
+using Scripts.src.Feature.Managers;
 using Scripts.src.Feature.Storage;
 using UnityEngine;
 using Zenject;
