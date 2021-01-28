@@ -42,7 +42,7 @@ public class PopupsModulePlaymodeTests : SceneTestFixture
         
         for (int i = 0; i < cachedPopups.Count; i++)
         {
-            var popupData = new PopupEntityBase()
+            var popupData = new PopupEntityWithId(cachedPopups[i].gameObject.name)
             {
                 PopupData = null,
                 PopupId = cachedPopups[i].gameObject.name,
@@ -80,7 +80,7 @@ public class PopupsModulePlaymodeTests : SceneTestFixture
 
         for (int i = 0; i < cachedPopups.Count; i++)
         {
-            var popupData = new PopupEntityBase(PopupRuleKeys.ForceShowRule)
+            var popupData = new PopupEntityWithId(PopupRuleKeys.ForceShowRule)
             {
                 PopupData = null,
                 PopupId = cachedPopups[i].gameObject.name,

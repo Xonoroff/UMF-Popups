@@ -39,25 +39,35 @@ namespace Scripts.src.Feature.Managers
 
         public async void Open(PopupEntityBase popupData, Action<PopupViewBase> onOpened = null, Action onFail = null)
         {
-            var request = new LoadPopupAssetRequest()
-            {
-                AssetId = popupData.PopupId,
-            };
 
             var rulesToOpen = container.TryResolveId<List<PopupRuleBase>>(popupData.PopupOpenRule);
             var canBePopupOpened = popupsManager.CanPopupBeOpened(rulesToOpen);
             if (canBePopupOpened)
             {
-                var response = await eventBus.FireAsync<LoadPopupAssetRequest, LoadPopupAssetResponse>(request);
-                var isError = response.Exception != null;
-                if (isError)
+                PopupViewBase view = null;
+                if (popupData is PopupEntityWithId entityWithId)
                 {
-                    OnPopupLoadedFailHandler(response.Exception);
+                    var request = new LoadPopupAssetRequest()
+                    {
+                        AssetId = entityWithId.PopupId,
+                    };
+                    var response = await eventBus.FireAsync<LoadPopupAssetRequest, LoadPopupAssetResponse>(request);
+                    var isError = response.Exception != null;
+                    if (isError)
+                    {
+                        OnPopupLoadedFailHandler(response.Exception);
+                    }
+                    else
+                    {
+                        view = response.Result;
+                    }
                 }
-                else
+                else if (popupData is PopupEntityWithAssetPrefab entityWithPrefab)
                 {
-                    OnPopupLoadedSuccessHandler(response.Result, popupData, onOpened);
-                } 
+                    view = entityWithPrefab.PopupViewPrefab;
+                }
+
+                OnPopupLoadedSuccessHandler(view, popupData, onOpened);
             }
             else
             {
@@ -70,7 +80,7 @@ namespace Scripts.src.Feature.Managers
             var expectedPopup = popupsManager.GetVisiblePopup(popupData);
             if (expectedPopup == null)
             {
-                Debug.LogError($"Popup with id {popupData.PopupId} can't be found in visiblePopups");
+                Debug.LogError($"Popup with id {popupData.Id} can't be found in visiblePopups");
                 onFail();
                 return;
             }
