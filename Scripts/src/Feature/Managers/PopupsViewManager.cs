@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Core.src.Messaging;
+using Core.src.Utils;
 using PopupsModule.src.Infrastructure.Entities;
 using PopupsModule.src.Infrastructure.Interfaces;
 using PopupsModule.src.Infrastructure.Messaging.RequestResponse.LoadPopup;
@@ -121,8 +122,20 @@ namespace Scripts.src.Feature.Managers
         private void OnPopupLoadedSuccessHandler(PopupViewBase popupView, PopupEntityBase popupData, Action<PopupViewBase> onSuccess)
         {
             var instantiatePrefab = container.InstantiatePrefab(popupView);
+            var eventWrapperComponent = instantiatePrefab.AddComponent<MonoBehaviourEventWrapperComponent>();
             var instantiatedPopupView = instantiatePrefab.GetComponent<PopupViewBase>();
-            instantiatedPopupView.OnHided += Close;
+            eventWrapperComponent.OnDestroyEvent += CloseHandlerWrapper;
+            instantiatedPopupView.OnHided += (p)=>
+            {
+                eventWrapperComponent.OnDestroyEvent -= CloseHandlerWrapper;
+                CloseHandlerWrapper();
+            };
+
+            void CloseHandlerWrapper()
+            {
+                Close(instantiatedPopupView);
+            }
+            
             instantiatedPopupView.Data = popupData;
             instantiatedPopupView.SetData(popupData);
             instantiatedPopupView.Show();
