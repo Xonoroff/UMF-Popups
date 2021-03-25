@@ -23,12 +23,28 @@ namespace Scripts.src.Feature.Managers
         [Inject]
         private IPopupsManager popupsManager;
         
-        private GameObject popupsCanvas;
+        private GameObject projectPopupsCanvas;
+        
+        private GameObject _scenePopupsCanvas;
+        
+        private GameObject scenePopupsCanvas
+        {
+            get
+            {
+                if (_scenePopupsCanvas == null)
+                {
+                    var root = new GameObject() {name = "PopupsSceneRoot"};
+                    _scenePopupsCanvas = Instantiate(projectPopupsCanvas, root.transform);
+                }
+
+                return _scenePopupsCanvas;
+            }
+        }
         
         [Inject]
         private void Initialize([Inject(Id = "PopupsCanvas")] GameObject popupsCanvasPrefab)
         {
-            popupsCanvas = container.InstantiatePrefab(popupsCanvasPrefab);
+            this.projectPopupsCanvas = container.InstantiatePrefab(popupsCanvasPrefab);
         }
         
 #pragma warning restore
@@ -39,7 +55,6 @@ namespace Scripts.src.Feature.Managers
 
         public async void Open(PopupEntityBase popupData, Action<PopupViewBase> onOpened = null, Action onFail = null)
         {
-
             var rulesToOpen = container.TryResolveId<List<PopupRuleBase>>(popupData.PopupOpenRule);
             var canBePopupOpened = popupsManager.CanPopupBeOpened(rulesToOpen);
             if (canBePopupOpened)
@@ -91,7 +106,11 @@ namespace Scripts.src.Feature.Managers
         private void Close(PopupViewBase popup)
         {
             popupsManager.Remove(popup);
-            Destroy(popup.gameObject);
+            if (popup != null)
+            {
+                Destroy(popup.gameObject);
+            }
+            
             var queuedPopup = popupsManager.DequeuePopup();
             if (queuedPopup != null)
             {
@@ -107,7 +126,8 @@ namespace Scripts.src.Feature.Managers
             instantiatedPopupView.Data = popupData;
             instantiatedPopupView.SetData(popupData);
             instantiatedPopupView.Show();
-            instantiatePrefab.transform.SetParent(popupsCanvas.transform, false);
+            var canvas = GetCanvasTransform(popupData.CanvasType);
+            instantiatePrefab.transform.SetParent(canvas, false);
             onSuccess?.Invoke(instantiatedPopupView);
 
             popupsManager.AddPopupAsVisible(instantiatedPopupView);
@@ -116,6 +136,16 @@ namespace Scripts.src.Feature.Managers
         private void OnPopupLoadedFailHandler(Exception exception)
         {
             Debug.LogError(exception.Message);
+        }
+
+        private Transform GetCanvasTransform(PopupsCanvasType canvas)
+        {
+            if (canvas == PopupsCanvasType.Project)
+            {
+                return projectPopupsCanvas.transform;
+            }
+
+            return scenePopupsCanvas.transform;
         }
     }
 }

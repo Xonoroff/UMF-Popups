@@ -6,7 +6,7 @@ namespace PopupsModule.src.Infrastructure.Entities
     {
         public PopupViewBase PopupViewPrefab { get; private set; }
 
-        public PopupEntityWithAssetPrefab(PopupViewBase popupViewPrefab, string ruleId = PopupRuleKeys.ShowIfNoVisiblePopupsRule) : base(ruleId)
+        public PopupEntityWithAssetPrefab(PopupViewBase popupViewPrefab, string ruleId = PopupRuleKeys.ShowIfNoVisiblePopupsRule, PopupsCanvasType canvasType = PopupsCanvasType.Scene) : base(ruleId, canvasType)
         {
             PopupViewPrefab = popupViewPrefab;
         }

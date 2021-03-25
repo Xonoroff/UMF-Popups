@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using Core.src.Entity;
-using Scripts.src.Feature.Entities;
 using Scripts.src.Infrastructure.Rules;
 
 namespace PopupsModule.src.Infrastructure.Entities
@@ -13,9 +11,12 @@ namespace PopupsModule.src.Infrastructure.Entities
 
         public string PopupOpenRule { get; }
         
-        public PopupEntityBase(string ruleId = PopupRuleKeys.ShowIfNoVisiblePopupsRule)
+        public PopupsCanvasType CanvasType { get; }
+        
+        public PopupEntityBase(string ruleId = PopupRuleKeys.ShowIfNoVisiblePopupsRule, PopupsCanvasType canvasType = PopupsCanvasType.Scene)
         {
             PopupOpenRule = ruleId;
+            CanvasType = canvasType;
         }
     }
 }
