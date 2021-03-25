@@ -124,16 +124,26 @@ namespace Scripts.src.Feature.Managers
             var instantiatePrefab = container.InstantiatePrefab(popupView);
             var eventWrapperComponent = instantiatePrefab.AddComponent<MonoBehaviourEventWrapperComponent>();
             var instantiatedPopupView = instantiatePrefab.GetComponent<PopupViewBase>();
-            eventWrapperComponent.OnDestroyEvent += CloseHandlerWrapper;
-            instantiatedPopupView.OnHided += (p)=>
-            {
-                eventWrapperComponent.OnDestroyEvent -= CloseHandlerWrapper;
-                CloseHandlerWrapper();
-            };
 
-            void CloseHandlerWrapper()
+            eventWrapperComponent.OnDestroyEvent += OnDestroyEventHandler;
+            instantiatedPopupView.OnHided += OnHideEventHandler;
+
+            void OnHideEventHandler(PopupViewBase p)
             {
+                RemoveSubscriptions();
                 Close(instantiatedPopupView);
+            }
+
+            void OnDestroyEventHandler()
+            {
+                RemoveSubscriptions();
+                Close(instantiatedPopupView);
+            }
+
+            void RemoveSubscriptions()
+            {
+                eventWrapperComponent.OnDestroyEvent -= OnDestroyEventHandler;
+                instantiatedPopupView.OnHided -= OnHideEventHandler;
             }
             
             instantiatedPopupView.Data = popupData;
