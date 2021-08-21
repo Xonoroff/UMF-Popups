@@ -79,7 +79,7 @@ public class PopupsModulePlaymodeTests : SceneTestFixture
 
         for (int i = 0; i < cachedPopups.Count; i++)
         {
-            var popupData = new PopupEntityWithId(PopupRuleKeys.ForceShowRule)
+            var popupData = new PopupEntityWithId(cachedPopups[i].gameObject.name, PopupRuleKeys.ForceShowRule)
             {
                 PopupData = null,
             };   
